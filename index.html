@@ -3,8 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Academic Resource Hub</title>
   
+  <!-- Primary Meta Tags -->
+  <title>Celestial | IIIT Bhagalpur Notes & PYQs</title>
+  <meta name="title" content="Celestial | IIIT Bhagalpur Notes & PYQs">
+  <meta name="description" content="Celestial is a student-made academic resource hub designed to make it easy for IIIT Bhagalpur students to find and download semester-wise lecture notes, PYQs, and study materials.">
+  <meta name="keywords" content="Celestial, IIIT Bhagalpur, IIIT BGP, PYQ, Notes, Engineering Notes, B.Tech, M.Tech, Study Material, AI, DS, ECE, CSE">
+  <meta name="author" content="Celestial">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://celestial-academic.netlify.app/"> <!-- Update with your actual live URL -->
+  <meta property="og:title" content="Celestial | IIIT Bhagalpur Notes & PYQs">
+  <meta property="og:description" content="A fast, ad-free platform for IIIT Bhagalpur students to easily access lecture notes and Previous Year Questions.">
+  <meta property="og:image" content="./iiit-bgp.jpg"> 
+
   <!-- Tailwind CSS CDN with Dark Mode Config -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -22,7 +35,6 @@
     body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s ease; }
     .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
     .dark .glass { background: rgba(15, 23, 42, 0.85); border-bottom-color: rgba(51, 65, 85, 0.5); }
-    /* Hide scrollbar for tabs on mobile */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -33,12 +45,12 @@
   <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 glass transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 font-extrabold text-lg">
-          📚
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 font-extrabold text-xl">
+          ✨
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Resource Portal</h1>
-          <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">Verified Notes & Previous Year Questions</p>
+          <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Celestial</h1>
+          <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">IIIT Bhagalpur Notes & PYQs</p>
         </div>
       </div>
       <div class="flex items-center space-x-4">
@@ -57,8 +69,28 @@
   </header>
 
   <!-- Main Container -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
     
+    <!-- Hero Banner for IIIT Bhagalpur -->
+    <div class="relative bg-slate-900 rounded-3xl overflow-hidden mb-8 shadow-lg border border-slate-800">
+      <!-- Added local image source here -->
+      <img src="./iiit-bgp.jpg" alt="IIIT Bhagalpur Campus" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay">
+      <!-- Gradient Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-slate-900/40"></div>
+      
+      <div class="relative px-6 py-12 sm:px-12 sm:py-16 flex flex-col items-start justify-center text-left">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-indigo-500/30 text-indigo-100 border border-indigo-400/30 mb-4 backdrop-blur-md">
+          IIIT Bhagalpur
+        </span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3">
+          Welcome to Celestial.
+        </h2>
+        <p class="text-indigo-100/90 max-w-xl text-sm sm:text-base font-medium leading-relaxed">
+          Made to make studying easier. Browse your branch and semester to instantly access and download lecture notes and Previous Year Questions (PYQs).
+        </p>
+      </div>
+    </div>
+
     <!-- Filter Bar -->
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-700 mb-8 transition-colors duration-300">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -117,7 +149,7 @@
 
       <!-- State: Skeleton Loader -->
       <div id="skeletonLoader" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
-        <!-- Generates 3 placeholder cards -->
+        <!-- 3 placeholder cards -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 animate-pulse">
           <div class="flex justify-between mb-4"><div class="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div></div>
           <div class="h-5 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
@@ -153,6 +185,7 @@
 
   <!-- Script Logic -->
   <script>
+    // MAKE SURE TO KEEP YOUR RENDER URL HERE
     const API_BASE_URL = 'https://academic-notes-backend.onrender.com/api';
 
     let fullHierarchy = [];
@@ -287,7 +320,6 @@
       const subId = subjectSelect.value;
       if (!subId) return clearResources();
       
-      // Update Header
       selectedSubjectData = selectedSemester.subjects.find(s => s.id === subId);
       if (selectedSubjectData) {
         subjectTitle.textContent = selectedSubjectData.name;
@@ -347,7 +379,6 @@
         const badgeStyle = isNotes ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800';
 
         const card = document.createElement('div');
-        // Micro-interaction classes added here
         card.className = 'bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group';
         card.innerHTML = `
           <div>
