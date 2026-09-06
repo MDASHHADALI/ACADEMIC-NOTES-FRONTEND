@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Academic Resource Hub</title>
+  
+  <!-- Tailwind CSS CDN with Dark Mode Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } }
+    }
+  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s ease; }
+    .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+    .dark .glass { background: rgba(15, 23, 42, 0.85); border-bottom-color: rgba(51, 65, 85, 0.5); }
+    /* Hide scrollbar for tabs on mobile */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 glass transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/30 font-extrabold text-lg">
+          📚
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Resource Portal</h1>
+          <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">Verified Notes & Previous Year Questions</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <!-- Live Status -->
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+          Live Sync
+        </span>
+        <!-- Dark Mode Toggle -->
+        <button id="themeToggle" class="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition">
+          <svg id="moonIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg id="sunIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    
+    <!-- Filter Bar -->
+    <section class="bg-white dark:bg-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-700 mb-8 transition-colors duration-300">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Program & Branch</label>
+          <select id="branchSelect" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            <option value="">Loading courses...</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Semester</label>
+          <div id="semesterContainer" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            <span class="text-xs text-slate-400 py-2.5">Select a course first</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Subject</label>
+          <select id="subjectSelect" disabled class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <option value="">Select a semester first</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Subject Header -->
+    <div id="subjectHeader" class="mb-6 hidden">
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white" id="subjectTitle">Subject Name</h2>
+      <p class="text-sm font-medium text-slate-500 dark:text-slate-400" id="subjectCode">Course Code</p>
+    </div>
+
+    <!-- Content Workspace -->
+    <section>
+      <!-- Toolbar -->
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-6">
+        
+        <!-- Tabs -->
+        <div class="inline-flex p-1 bg-slate-200/60 dark:bg-slate-800 rounded-xl overflow-x-auto no-scrollbar whitespace-nowrap">
+          <button id="tabAll" class="px-5 py-2 text-xs font-bold rounded-lg transition bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 shadow-sm">All Resources</button>
+          <button id="tabNotes" class="px-5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg transition">Notes Only</button>
+          <button id="tabPYQ" class="px-5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg transition">PYQ Only</button>
+        </div>
+
+        <!-- Search & Sort Controls -->
+        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+          <div class="relative w-full sm:w-64">
+            <svg class="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="searchInput" placeholder="Search topics..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+          </div>
+          <select id="sortSelect" class="w-full sm:w-40 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="alpha">Alphabetical</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- State: Skeleton Loader -->
+      <div id="skeletonLoader" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
+        <!-- Generates 3 placeholder cards -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 animate-pulse">
+          <div class="flex justify-between mb-4"><div class="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div></div>
+          <div class="h-5 w-3/4 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
+          <div class="h-5 w-1/2 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between"><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div><div class="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg"></div></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 animate-pulse hidden md:block">
+            <div class="flex justify-between mb-4"><div class="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div></div>
+            <div class="h-5 w-2/3 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
+            <div class="h-5 w-1/2 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between"><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div><div class="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg"></div></div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 animate-pulse hidden lg:block">
+            <div class="flex justify-between mb-4"><div class="h-6 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div></div>
+            <div class="h-5 w-5/6 bg-slate-200 dark:bg-slate-700 rounded mb-2"></div>
+            <div class="h-5 w-1/3 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-between"><div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded"></div><div class="h-8 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg"></div></div>
+        </div>
+      </div>
+
+      <!-- State: Empty State -->
+      <div id="emptyState" class="hidden text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 border-dashed transition-colors duration-300">
+        <div class="w-16 h-16 bg-slate-50 dark:bg-slate-700/50 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-4 text-slate-400 shadow-inner">📂</div>
+        <h3 class="text-base font-bold text-slate-800 dark:text-white">No resources found</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">Select a subject or adjust your search filters to view notes.</p>
+      </div>
+
+      <!-- Resources Grid -->
+      <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+  </main>
+
+  <!-- Script Logic -->
+  <script>
+    const API_BASE_URL = 'https://academic-notes-backend.onrender.com/api';
+
+    let fullHierarchy = [];
+    let currentResources = [];
+    let selectedType = 'ALL';
+    let selectedSemester = null;
+    let selectedSubjectData = null;
+
+    // DOM Elements
+    const branchSelect = document.getElementById('branchSelect');
+    const semesterContainer = document.getElementById('semesterContainer');
+    const subjectSelect = document.getElementById('subjectSelect');
+    const resourceGrid = document.getElementById('resourceGrid');
+    const skeletonLoader = document.getElementById('skeletonLoader');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const subjectHeader = document.getElementById('subjectHeader');
+    const subjectTitle = document.getElementById('subjectTitle');
+    const subjectCode = document.getElementById('subjectCode');
+
+    // Theme Setup
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        htmlEl.classList.add('dark');
+    }
+    themeToggle.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+    });
+
+    // Helper: Format File Size
+    function formatBytes(bytes, decimals = 2) {
+        if (!+bytes) return 'Unknown Size';
+        const k = 1024, dm = decimals < 0 ? 0 : decimals, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    }
+
+    // 1. Initial Load
+    async function init() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/hierarchy`);
+        if (!res.ok) throw new Error('Network error');
+        fullHierarchy = await res.json();
+        populateBranches();
+      } catch (err) {
+        emptyState.innerHTML = `<h3 class="text-red-500 font-bold">API Connection Failed</h3><p class="text-xs mt-1">Is your Render server awake?</p>`;
+        emptyState.classList.remove('hidden');
+      }
+    }
+
+    // 2. Populate Branches
+    function populateBranches() {
+      branchSelect.innerHTML = '<option value="">Select Branch</option>';
+      fullHierarchy.forEach(program => {
+        program.branches.forEach(branch => {
+          const opt = document.createElement('option');
+          opt.value = JSON.stringify({ programId: program.id, branchId: branch.id });
+          opt.textContent = `${program.name} - ${branch.name}`;
+          branchSelect.appendChild(opt);
+        });
+      });
+      if (branchSelect.options.length > 1) {
+        branchSelect.selectedIndex = 1;
+        handleBranchChange();
+      }
+    }
+
+    // 3. Handle Branch Selection
+    function handleBranchChange() {
+      subjectHeader.classList.add('hidden');
+      if (!branchSelect.value) {
+        semesterContainer.innerHTML = `<span class="text-xs text-slate-400 py-2.5">Select a course first</span>`;
+        subjectSelect.disabled = true;
+        subjectSelect.innerHTML = '<option value="">Select a semester first</option>';
+        clearResources();
+        return;
+      }
+
+      const { programId, branchId } = JSON.parse(branchSelect.value);
+      const program = fullHierarchy.find(p => p.id === programId);
+      const branch = program.branches.find(b => b.id === branchId);
+
+      semesterContainer.innerHTML = '';
+      if (!branch.semesters.length) {
+        semesterContainer.innerHTML = `<span class="text-xs text-amber-600 py-2">No semesters created yet</span>`;
+        return;
+      }
+
+      branch.semesters.forEach((sem, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `px-4 py-2 text-xs font-bold rounded-xl border transition ${
+          idx === 0 ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+        } whitespace-nowrap`;
+        btn.textContent = `Sem ${sem.number}`;
+        btn.onclick = () => selectSemester(sem, btn);
+        semesterContainer.appendChild(btn);
+        if (idx === 0) selectSemester(sem, btn);
+      });
+    }
+
+    // 4. Select Semester
+    function selectSemester(semester, activeBtn) {
+      selectedSemester = semester;
+      Array.from(semesterContainer.children).forEach(child => {
+        child.className = 'px-4 py-2 text-xs font-bold rounded-xl border transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 whitespace-nowrap';
+      });
+      activeBtn.className = 'px-4 py-2 text-xs font-bold rounded-xl border transition bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20 whitespace-nowrap';
+
+      subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+      if (semester.subjects.length > 0) {
+        subjectSelect.disabled = false;
+        semester.subjects.forEach(sub => {
+          const opt = document.createElement('option');
+          opt.value = sub.id;
+          opt.textContent = sub.code ? `${sub.code} - ${sub.name}` : sub.name;
+          subjectSelect.appendChild(opt);
+        });
+        subjectSelect.selectedIndex = 1;
+        handleSubjectChange();
+      } else {
+        subjectSelect.disabled = true;
+        subjectSelect.innerHTML = '<option value="">No subjects found</option>';
+        clearResources();
+      }
+    }
+
+    // 5. Handle Subject Change
+    function handleSubjectChange() {
+      const subId = subjectSelect.value;
+      if (!subId) return clearResources();
+      
+      // Update Header
+      selectedSubjectData = selectedSemester.subjects.find(s => s.id === subId);
+      if (selectedSubjectData) {
+        subjectTitle.textContent = selectedSubjectData.name;
+        subjectCode.textContent = selectedSubjectData.code ? `Course Code: ${selectedSubjectData.code}` : '';
+        subjectHeader.classList.remove('hidden');
+      }
+
+      fetchResources(subId);
+    }
+
+    // 6. Fetch Resources
+    async function fetchResources(subjectId) {
+      resourceGrid.innerHTML = '';
+      emptyState.classList.add('hidden');
+      skeletonLoader.classList.remove('hidden');
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/subjects/${subjectId}/resources`);
+        if (!res.ok) throw new Error('Fetch failed');
+        currentResources = await res.json();
+        renderResources();
+      } catch (err) {
+        console.error(err);
+        clearResources();
+      } finally {
+        skeletonLoader.classList.add('hidden');
+      }
+    }
+
+    // 7. Render & Sort & Filter Resources
+    function renderResources() {
+      resourceGrid.innerHTML = '';
+      const query = searchInput.value.toLowerCase().trim();
+      const sortVal = sortSelect.value;
+
+      let filtered = currentResources.filter(item => {
+        return (selectedType === 'ALL' || item.type === selectedType) && item.title.toLowerCase().includes(query);
+      });
+
+      // Apply Sort
+      filtered.sort((a, b) => {
+        if (sortVal === 'newest') return new Date(b.date) - new Date(a.date);
+        if (sortVal === 'oldest') return new Date(a.date) - new Date(b.date);
+        if (sortVal === 'alpha') return a.title.localeCompare(b.title);
+      });
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      filtered.forEach(res => {
+        const dateStr = new Date(res.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const sizeStr = formatBytes(res.fileSize);
+        const isNotes = res.type === 'NOTES';
+        const badgeStyle = isNotes ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800';
+
+        const card = document.createElement('div');
+        // Micro-interaction classes added here
+        card.className = 'bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] font-bold px-2.5 py-1 rounded-full border ${badgeStyle}">${isNotes ? 'Lecture Note' : 'PYQ Paper'}</span>
+              <span class="text-xs text-slate-400 font-medium">${dateStr}</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white line-clamp-2 leading-snug mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${res.title}</h3>
+          </div>
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between mt-4">
+            <span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              ${sizeStr}
+            </span>
+            <div class="flex gap-2">
+              <a href="${res.fileUrl}" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 text-slate-700 dark:text-slate-300 text-xs font-semibold transition">View</a>
+              <a href="${res.fileUrl}" download class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">Download</a>
+            </div>
+          </div>
+        `;
+        resourceGrid.appendChild(card);
+      });
+    }
+
+    function clearResources() {
+      currentResources = [];
+      resourceGrid.innerHTML = '';
+      subjectHeader.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+    }
+
+    // Event Listeners
+    subjectSelect.addEventListener('change', handleSubjectChange);
+    searchInput.addEventListener('input', renderResources);
+    sortSelect.addEventListener('change', renderResources);
+
+    function setTab(activeBtn, type) {
+      selectedType = type;
+      [document.getElementById('tabAll'), document.getElementById('tabNotes'), document.getElementById('tabPYQ')].forEach(btn => {
+        btn.className = 'px-5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg transition';
+      });
+      activeBtn.className = 'px-5 py-2 text-xs font-bold rounded-lg transition bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 shadow-sm';
+      renderResources();
+    }
+    document.getElementById('tabAll').onclick = (e) => setTab(e.target, 'ALL');
+    document.getElementById('tabNotes').onclick = (e) => setTab(e.target, 'NOTES');
+    document.getElementById('tabPYQ').onclick = (e) => setTab(e.target, 'PYQ');
+
+    init();
+  </script>
+</body>
+</html>
